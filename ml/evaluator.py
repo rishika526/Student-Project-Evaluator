@@ -1,4 +1,3 @@
-
 from preprocess import clean_text
 from keywords import TECH_KEYWORDS
 def evaluate_project(title,descrption,technologies):
