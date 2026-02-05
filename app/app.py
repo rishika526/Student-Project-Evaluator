@@ -1,6 +1,8 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import streamlit as st
 from ml.evaluator import evaluate_project
-
 st.set_page_config(
     page_title="Student Project Evaluator",
     layout="centered"
