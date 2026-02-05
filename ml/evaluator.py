@@ -1,5 +1,5 @@
 from ml.preprocess import clean_text
-from ml.keywords import COMMON_PROJECTS, REAL_WORLD_KEYWORDS, ML_KEYWORDS
+from ml.keyword import COMMON_PROJECTS, REAL_WORLD_KEYWORDS, ML_KEYWORDS
 
 def evaluate_project(title, description, technologies):
     score = 0
