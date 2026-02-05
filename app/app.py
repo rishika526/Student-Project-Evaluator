@@ -1,59 +1,60 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-# -------- Imports --------
 import streamlit as st
 from ml.evaluator import evaluate_project
 
-# -------- Page Config --------
-st.set_page_config(page_title="Student Project Evaluator", layout="centered")
-
-# -------- UI --------
-st.title("🎓 AI-Powered Student Project Evaluator")
-st.write("Enter your project details to get an automated evaluation.")
-
-# -------- Inputs --------
-project_title = st.text_input("📌 Project Title")
-
-project_description = st.text_area(
-    "📝 Project Description",
-    height=200
+st.set_page_config(
+    page_title="Student Project Evaluator",
+    layout="centered"
 )
 
-technologies = st.text_input(
-    "🛠 Technologies Used (comma separated)"
+st.title("🎓 AI-Based Student Project Evaluator")
+st.write(
+    "This tool evaluates student projects based on **innovation**, "
+    "**real-world impact**, and **technical depth**."
 )
 
-# -------- Button Logic --------
+# -------- Input Section --------
+st.subheader("📌 Enter Project Details")
+
+title = st.text_input("Project Title")
+description = st.text_area("Project Description", height=220)
+technologies = st.text_input("Technologies / Tools Used")
+
+# -------- Evaluation --------
 if st.button("Evaluate Project"):
-
-    if project_title and project_description and technologies:
-
-        score, strengths, improvements = evaluate_project(
-            project_title,
-            project_description,
-            technologies
+    if not title or not description or not technologies:
+        st.warning("⚠️ Please fill in all the fields before evaluation.")
+    else:
+        score, strengths, improvements, suitability = evaluate_project(
+            title, description, technologies
         )
 
         st.divider()
-        st.subheader("📊 Evaluation Results")
 
-        st.metric("Final Score", f"{score}/100")
+        # -------- Score --------
+        st.subheader("📊 Evaluation Score")
+        st.metric(label="Overall Score", value=f"{score}/100")
 
-        st.write("### ✅ Strengths")
+        # -------- Suitability --------
+        st.subheader("🌍 Real-World Suitability")
+        if score >= 75:
+            st.success(suitability)
+        elif score >= 50:
+            st.warning(suitability)
+        else:
+            st.error(suitability)
+
+        # -------- Strengths --------
         if strengths:
+            st.subheader("✅ Strengths Identified")
             for s in strengths:
                 st.write("•", s)
-        else:
-            st.write("No major strengths detected.")
 
-        st.write("### ❌ Improvements")
+        # -------- Improvements --------
         if improvements:
+            st.subheader("⚠️ Areas Needing Improvement")
             for i in improvements:
                 st.write("•", i)
-        else:
-            st.write("No major improvements required.")
 
-    else:
-        st.warning("⚠️ Please fill all fields before evaluation.")
+        st.divider()
+        st.caption("🔍 Evaluation is based on rule-based NLP analysis")
+
